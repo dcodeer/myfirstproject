@@ -7,22 +7,49 @@ print(random.choice(greetings),"!")
 
 user = input("Say something or type bye to quit\n").strip().lower()
 
-keywords =  ["music", "movie", "food", "weather", "sports", "news", "travel", "games", "books", "technology"]
-responses = ["That's interesting!", "Tell me more!", "I see!", "Really?", "Oh, wow!", "That's cool!", "Fascinating!", "Wow, that's great!", "Sounds fun!", "Nice!"]
+keywords =  ["music", "movie"]
+responses = ["That's interesting!", "Tell me more!"]
 
 while user != "bye":
     keyword_found = False
-
-    for index in range(len(keywords)):
-        if keywords[index] in user:
-            print(random.choice(responses))
-            keyword_found = True
-
+    
+    #for index in range(len(keywords)):
+    #    print("keyword: ", keywords[index])
+    #    print("response: ", responses[index])
+    try:
+        idx = keywords.index(user)
+        keyword_found = True
+        print("Bot: ", responses[idx])
+    except ValueError:
+        idx = -1
+        keyword_found = False
+    
     if keyword_found == False:
-        new_keyword = input("I don't understand. Can you tell me more How to respond to it?\n")
-        keywords.append(new_keyword)
-        responses.append("I see! I will remember that.\n")
-        print("Thanks for teaching me!\n")
+        print("Searching from predefined list...")
+        try:
+            with open("chatbot_memory.txt", "r") as f:
+                for line in f:
+                    user_f, response_f = line.strip().split(":")
+                    keywords.append(user_f)
+                    responses.append(response_f)
+                    continue
+        except FileNotFoundError:
+            pass
+        try:
+            idx1 = keywords.index(user)
+            keyword_found = True
+        except ValueError:
+            idx1 = -1
 
+        if idx1 == -1:
+            print("I don't know about that yet!\n")
+            user_response = input("What would you like me to say next time?\n")
+            keywords.append(user)
+            responses.append(user_response)
+            with open("chatbot_memory.txt", "a") as f:
+                f.write(f"{user}:{user_response}\n")
+        else:
+            print("Bot: ", responses[idx1])
+            keyword_found = True
     user = input("Say something or type bye to quit\n").strip().lower()
 print(random.choice(farewell), "!")
