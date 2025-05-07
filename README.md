@@ -1,0 +1,1 @@
+This repository is my own work to learn about how AI/ML works in real world. Most of the programs written here are completed with help of many different sources. I will gradually write codes exploring different algorithms in ML and try to implement AI whenever possible.
